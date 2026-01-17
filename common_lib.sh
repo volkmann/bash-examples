@@ -22,13 +22,12 @@ Commands:
   <command>  The command to execute. Available commands include:
     hello     Prints a greeting message.
     goodbye   Prints a farewell message.
+
 EOF
 
 extract_all_comments "$__FILE"
 
 cat <<EOF
-
-
 Options:
   --help     Show this help message and exit.
   --verbose  Enable verbose mode for more detailed output.
@@ -75,6 +74,23 @@ init_global_parameters() {
 is_empty() {
   local str="${1-}"
   [ -z "$str" ]
+}
+
+# ----------------------------------------------------------------------
+# is_empty_or_whitespace
+# Checks if a string is empty or whitespace only.
+# Args:
+#   $1: string
+# Returns:
+#   0 (true) if empty, 1 otherwise
+# ----------------------------------------------------------------------
+is_empty_or_whitespace() {
+  local line="$1"
+  if [ -z "$(echo "$line" | tr -d '[:space:]')" ]; then
+    return 0
+  else
+    return 1
+  fi
 }
 
 # ----------------------------------------------------------------------
@@ -219,8 +235,16 @@ collect_comment() {
   local existing_block="$1"
   local new_comment_line="$2"
 
+  # Entferne Trennlinien, die nur aus '#' und wiederholten '-' oder '=' Zeichen bestehen
+  new_comment_line=$(echo "$new_comment_line" | sed '/^[[:space:]]*#[[:space:]]*\([-=]\)\1\{2,\}[[:space:]]*$/d')
+
+  # Remove the '#' and any leading whitespace from the comment line
+  new_comment_line=$(echo "$new_comment_line" | sed 's/^[[:space:]]*#[[:space:]]*//')
+
   if is_empty "$existing_block"; then
     echo "$new_comment_line"
+  elif is_empty_or_whitespace "$new_comment_line"; then
+    echo "$existing_block"
   else
     append_comment "$existing_block" "$new_comment_line"
   fi
