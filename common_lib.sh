@@ -220,11 +220,6 @@ extract_func_name() {
 
   func_name=$(echo "$func_name" | tr -d ' ')
 
-  if is_non_empty "${__FUNCTION_PREFIX-}" &&
-    [[ "$func_name" == "$__FUNCTION_PREFIX"* ]]; then
-    func_name="${func_name#cmd_}"  # Entferne das Prefix 'cmd_'
-  fi
-
   printf '%s\n' "$func_name"
 }
 
@@ -316,12 +311,23 @@ handle_function_end() {
     return
   fi
 
+  # If __FUNCTION_PREFIX is set, only process functions with this prefix
+  if is_non_empty "${__FUNCTION_PREFIX-}" &&
+    [[ "$function_name" != "${__FUNCTION_PREFIX}"* ]]; then
+    comment_block=""
+    return
+  fi
+
+  # Remove the prefix from the function name, if __FUNCTION_PREFIX is set
+  if is_non_empty "${__FUNCTION_PREFIX-}" && [[ "$function_name" == "${__FUNCTION_PREFIX}"* ]]; then
+    function_name="${function_name#${__FUNCTION_PREFIX}}"  # Entferne das Präfix
+  fi
+
   if is_non_empty "$comment_block"; then
     printf '  %s\n' "$function_name"
     echo "    $comment_block"
     echo
   else
-#    printf 'Function "%s" has no comment block\n\n' "$function_name"
     printf '  %s\n' "$function_name"
   fi
 }
