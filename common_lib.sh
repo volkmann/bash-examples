@@ -44,6 +44,21 @@ EOF
 }
 
 # ----------------------------------------------------------------------
+# Displays help for a specific command or general usage if no command is provided.
+# Args:
+#   $1 (optional): The command for which to display help.
+# ----------------------------------------------------------------------
+help() {
+  local cmd="${1-}"  # Get the command argument or default to empty.
+  local cmd_func=
+
+  if is_non_empty "${cmd}"; then
+    cmd_func="${__FUNCTION_PREFIX-}${cmd}"
+  fi
+  extract_all_comments "${__FILE}" "${cmd_func}"
+}
+
+# ----------------------------------------------------------------------
 # set_shell_option
 # ----------------------------------------------------------------------
 set_shell_options() {
