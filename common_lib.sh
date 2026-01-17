@@ -322,7 +322,7 @@ handle_function_end() {
     echo
   else
 #    printf 'Function "%s" has no comment block\n\n' "$function_name"
-    printf '  %s' "$function_name"
+    printf '  %s\n' "$function_name"
   fi
 }
 
