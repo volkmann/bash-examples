@@ -219,6 +219,12 @@ extract_func_name() {
   esac
 
   func_name=$(echo "$func_name" | tr -d ' ')
+
+  if is_non_empty "${__FUNCTION_PREFIX-}" &&
+    [[ "$func_name" == "$__FUNCTION_PREFIX"* ]]; then
+    func_name="${func_name#cmd_}"  # Entferne das Prefix 'cmd_'
+  fi
+
   printf '%s\n' "$func_name"
 }
 
