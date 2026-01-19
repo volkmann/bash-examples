@@ -399,6 +399,42 @@ extract_all_comments() {
 }
 
 # ----------------------------------------------------------------------
+# list_functions lists declared shell functions.
+#
+# If a prefix is provided, only functions whose names start with that prefix
+# are listed. If no prefix is given, all declared shell functions are listed.
+#
+# This implementation assumes that the shell supports the `declare` command
+# (e.g., Bash, Ksh). If you are using a POSIX shell, a different approach
+# would be necessary.
+#
+# Usage:
+#   list_functions
+#   list_functions "cmd_"
+#
+# Arguments:
+#   $1: Optional. Function name prefix to filter by.
+#
+# Outputs:
+#   Writes matching function names, one per line, to stdout.
+#
+# Returns:
+#   0: Success.
+#   1: Error if no functions are declared or if an unexpected error occurs.
+# ----------------------------------------------------------------------
+list_functions() {
+  prefix=${1-}
+
+  if is_non_empty "$prefix"; then
+    # Filter functions by prefix
+    declare -F | grep -o "^declare -f ${prefix}[A-Za-z0-9_]*" | awk '{print $3}'
+  else
+    # List all functions
+    declare -F | awk '{print $3}'
+  fi
+}
+
+# ----------------------------------------------------------------------
 # Main
 # Entry point of the script.
 # Args:
