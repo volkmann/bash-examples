@@ -485,6 +485,11 @@ main() {
     esac
   done
 
+  if ( is_non_empty "${HELP-}" ); then
+    help "$@"
+    exit 0
+  fi
+
   # Check if the first argument (command) is provided
   if [ -z "${1-}" ]; then
     usage >&2  # Print usage message to stderr
