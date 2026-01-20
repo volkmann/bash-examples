@@ -251,11 +251,11 @@ collect_comment() {
   local existing_block="$1"
   local new_comment_line="$2"
 
-  # Entferne Trennlinien, die nur aus '#' und wiederholten '-' oder '=' Zeichen bestehen
-  new_comment_line=$(echo "$new_comment_line" | sed '/^[[:space:]]*#[[:space:]]*\([-=]\)\1\{2,\}[[:space:]]*$/d')
+  # Remove separators consisting only of '#' and repeated '#', '-' or '=' characters
+  new_comment_line=$(echo "$new_comment_line" | sed '/^[[:space:]]*#[[:space:]]*\([-=#]\)\1\{2,\}[[:space:]]*$/d')
 
   # Remove the '#' and any leading whitespace from the comment line
-  new_comment_line=$(echo "$new_comment_line" | sed 's/^[[:space:]]*#[[:space:]]*//')
+  new_comment_line=$(echo "$new_comment_line" | sed 's/^[[:space:]]*#[[:space:]]//')
 
   if is_empty "$existing_block"; then
     echo "$new_comment_line"
