@@ -3,6 +3,13 @@
 # Supports all common shell function definitions, including multi-line headers
 # with '{' on the next line.
 
+# ===Multiple source guard ===
+if [ "${_COMMON_LIB_SOURCED:-}" = "1" ]; then
+  return 0 2>/dev/null || exit 0
+fi
+_COMMON_LIB_SOURCED=1
+
+## Copy the following three lines to your script and uncomment them!
 #__FUNCTION_PREFIX='cmd_'
 #readonly SCRIPT_PATH="$(cd -- "$(dirname -- "${0}")" && pwd -P)"
 #source "${SCRIPT_PATH}/common_lib.sh"
