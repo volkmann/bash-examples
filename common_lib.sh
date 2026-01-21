@@ -2,6 +2,11 @@
 # POSIX shell script library: Extract functions and comment blocks from scripts.
 # Supports all common shell function definitions, including multi-line headers
 # with '{' on the next line.
+#
+# Provides extended is_* functions for:
+#   - Strings
+#   - Integers
+#   - Files/Paths
 
 # ===Multiple source guard ===
 if [ "${_COMMON_LIB_SOURCED:-}" = "1" ]; then
@@ -260,6 +265,171 @@ is_executable() {
 file_not_empty() {
   local path="${1-}"
   [ -s "$path" ]
+}
+
+# Checks if a string represents a valid integer (positive or negative).
+# Args:
+#   $1: string
+# Returns:
+#   0 (true) if integer, 1 otherwise
+is_integer() {
+  local str="${1-}"
+  case "$str" in
+    ''|*[!0-9-]*) return 1 ;;
+    -|--*) return 1 ;;
+    *) return 0 ;;
+  esac
+}
+
+# Checks if a string represents a positive integer (>0).
+# Args:
+#   $1: string
+# Returns:
+#   0 (true) if positive integer, 1 otherwise
+is_positive_integer() {
+  local str="${1-}"
+  case "$str" in
+    ''|*[!0-9]*) return 1 ;;
+    0) return 1 ;;
+    *) return 0 ;;
+  esac
+}
+
+# Checks if integer $1 is between $2 and $3 inclusive.
+# Args:
+#   $1: integer to check
+#   $2: lower bound
+#   $3: upper bound
+# Returns:
+#   0 (true) if $1 >= $2 and $1 <= $3, 1 otherwise
+is_between() {
+  local val="${1-}" low="${2-}" high="${3-}"
+  [ "$val" -ge "$low" ] 2>/dev/null && [ "$val" -le "$high" ] 2>/dev/null
+}
+
+# Checks if integer is odd.
+# Args:
+#   $1: integer
+# Returns:
+#   0 (true) if odd, 1 otherwise
+is_odd() {
+  local val="${1-}"
+  [ $((val % 2)) -eq 1 ] 2>/dev/null
+}
+
+# Checks if integer is even.
+# Args:
+#   $1: integer
+# Returns:
+#   0 (true) if even, 1 otherwise
+is_even() {
+  local val="${1-}"
+  [ $((val % 2)) -eq 0 ] 2>/dev/null
+}
+
+# Checks if string $1 starts with prefix $2.
+# Args:
+#   $1: string
+#   $2: prefix
+# Returns:
+#   0 (true) if $1 starts with $2, 1 otherwise
+starts_with() {
+  local str="${1-}" prefix="${2-}"
+  [ "${str#"$prefix"}" != "$str" ]
+}
+
+# Checks if string $1 ends with suffix $2.
+# Args:
+#   $1: string
+#   $2: suffix
+# Returns:
+#   0 (true) if $1 ends with $2, 1 otherwise
+ends_with() {
+  local str="${1-}" suffix="${2-}"
+  case "$str" in
+    *"$suffix") return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+# Checks if string $1 contains substring $2.
+# Args:
+#   $1: string
+#   $2: substring
+# Returns:
+#   0 (true) if substring is found, 1 otherwise
+contains_substring() {
+  local str="${1-}" sub="${2-}"
+  case "$str" in
+    *"$sub"*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+# Checks if a path is absolute (starts with /).
+# Args:
+#   $1: path
+# Returns:
+#   0 (true) if absolute, 1 otherwise
+is_absolute_path() {
+  local path="${1-}"
+  case "$path" in
+    /*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+# Checks if a path is relative (does not start with /).
+# Args:
+#   $1: path
+# Returns:
+#   0 (true) if relative, 1 otherwise
+is_relative_path() {
+  local path="${1-}"
+  case "$path" in
+    /*) return 1 ;;
+    *) return 0 ;;
+  esac
+}
+
+# Checks if a path is a symbolic link.
+# Args:
+#   $1: path
+# Returns:
+#   0 (true) if symlink, 1 otherwise
+is_symlink() {
+  local path="${1-}"
+  [ -L "$path" ]
+}
+
+# Checks if path is a readable regular file.
+# Args:
+#   $1: path
+# Returns:
+#   0 (true) if file exists and readable, 1 otherwise
+is_readable_file() {
+  local path="${1-}"
+  [ -f "$path" ] && [ -r "$path" ]
+}
+
+# Checks if path is a writable directory.
+# Args:
+#   $1: path
+# Returns:
+#   0 (true) if directory exists and writable, 1 otherwise
+is_writable_dir() {
+  local path="${1-}"
+  [ -d "$path" ] && [ -w "$path" ]
+}
+
+# Checks if path is a file and executable.
+# Args:
+#   $1: path
+# Returns:
+#   0 (true) if executable file, 1 otherwise
+file_is_executable() {
+  local path="${1-}"
+  [ -f "$path" ] && [ -x "$path" ]
 }
 
 # Checks if a string is empty or whitespace only.
