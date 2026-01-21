@@ -546,7 +546,7 @@ collect_comment() {
   local new_comment_line="$2"
 
   # Remove separators consisting only of '#' and repeated '#', '-' or '=' characters
-  new_comment_line=$(echo "$new_comment_line" | sed '/^[[:space:]]*#[[:space:]]*\([-=#]\)\1\{2,\}[[:space:]]*$/d')
+  new_comment_line=$(echo "$new_comment_line" | sed '/^[[:space:]]*#[[:space:]]*$/d; /^[[:space:]]*#[[:space:]]*\([#=-]\)\1\{2,\}[[:space:]]*$/d')
 
   # Remove the '#' and any leading whitespace from the comment line
   new_comment_line=$(echo "$new_comment_line" | sed 's/^[[:space:]]*#[[:space:]]//')
