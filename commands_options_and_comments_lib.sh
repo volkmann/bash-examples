@@ -9,15 +9,15 @@
 #   - Files/Paths
 
 # ===Multiple source guard ===
-if [ "${_COMMON_LIB_SOURCED:-}" = "1" ]; then
+if [ "${_COMMANDS_OPTIONS_AND_COMMENTS_LIB_SOURCED:-}" = "1" ]; then
   return 0 2>/dev/null || exit 0
 fi
-_COMMON_LIB_SOURCED=1
+_COMMANDS_OPTIONS_AND_COMMENTS_LIB_SOURCED=1
 
 ## Copy the following three lines to your script and uncomment them!
 #__FUNCTION_PREFIX='cmd_'
 #readonly SCRIPT_PATH="$(cd -- "$(dirname -- "${0}")" && pwd -P)"
-#source "${SCRIPT_PATH}/common_lib.sh"
+#source "${SCRIPT_PATH}/commands_options_and_comments_lib.sh"
 
 # Prints out the inline help
 usage() {
