@@ -722,9 +722,6 @@ main() {
   # Set shell options for safety and debugging
   set_shell_options
 
-  # Initialize global parameters (if any)
-  init_global_parameters
-
   # Parse command-line arguments
   local cmd=""
   local cmd_func=""
@@ -761,6 +758,9 @@ main() {
         ;;
     esac
   done
+
+  # Initialize global parameters (if any)
+  init_global_parameters
 
   if ( is_not_empty "${HELP-}" ); then
     help "$@"
