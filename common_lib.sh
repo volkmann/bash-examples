@@ -14,10 +14,7 @@ _COMMON_LIB_SOURCED=1
 #readonly SCRIPT_PATH="$(cd -- "$(dirname -- "${0}")" && pwd -P)"
 #source "${SCRIPT_PATH}/common_lib.sh"
 
-# ----------------------------------------------------------------------
-# usage
 # Prints out the inline help
-# ----------------------------------------------------------------------
 usage() {
   cat <<EOF
 USAGE:
@@ -50,24 +47,20 @@ Examples:
 EOF
 }
 
-# ----------------------------------------------------------------------
 # Displays help for a specific command or general usage if no command is provided.
 # Args:
 #   $1 (optional): The command for which to display help.
-# ----------------------------------------------------------------------
 help() {
   local cmd="${1-}"  # Get the command argument or default to empty.
   local cmd_func=
 
-  if is_non_empty "${cmd}"; then
+  if is_not_empty "${cmd}"; then
     cmd_func="${__FUNCTION_PREFIX-}${cmd}"
   fi
   extract_all_comments "${__FILE}" "${cmd_func}"
 }
 
-# ----------------------------------------------------------------------
 # set_shell_option
-# ----------------------------------------------------------------------
 set_shell_options() {
   set -o errexit
   set -o pipefail
@@ -75,9 +68,7 @@ set_shell_options() {
 #  set -o xtrace
 }
 
-# ----------------------------------------------------------------------
 # init_global_parameters
-# ----------------------------------------------------------------------
 init_global_parameters() {
   readonly __SCRIPT_NAME="${0}"
   readonly __DIR="$(cd -- "$(dirname -- "${0}")" && pwd -P)"
@@ -85,27 +76,197 @@ init_global_parameters() {
   readonly __BASE="$(basename -- ${__FILE} .sh)"
 }
 
-# ----------------------------------------------------------------------
-# is_empty
 # Checks if a string is empty.
 # Args:
 #   $1: string
 # Returns:
 #   0 (true) if empty, 1 otherwise
-# ----------------------------------------------------------------------
 is_empty() {
   local str="${1-}"
   [ -z "$str" ]
 }
 
-# ----------------------------------------------------------------------
-# is_empty_or_whitespace
+# Checks if a string is non-empty.
+# Args:
+#   $1: string
+# Returns:
+#   0 (true) if non-empty, 1 otherwise
+is_not_empty() {
+  local str="${1-}"
+  [ -n "$str" ]
+}
+
+# Checks if two strings are equal.
+# Args:
+#   $1: first string
+#   $2: second string
+# Returns:
+#   0 (true) if equal, 1 otherwise
+is_equal() {
+  local a="${1-}"
+  local b="${2-}"
+  [ "$a" = "$b" ]
+}
+
+# Checks if two strings are not equal.
+# Args:
+#   $1: first string
+#   $2: second string
+# Returns:
+#   0 (true) if not equal, 1 otherwise
+is_not_equal() {
+  local a="${1-}"
+  local b="${2-}"
+  [ "$a" != "$b" ]
+}
+
+# Checks if two integers are equal.
+# Args:
+#   $1: first integer
+#   $2: second integer
+# Returns:
+#   0 (true) if equal, 1 otherwise
+is_int_equal() {
+  local a="${1-}"
+  local b="${2-}"
+  [ "$a" -eq "$b" ]
+}
+
+# Checks if two integers are not equal.
+# Args:
+#   $1: first integer
+#   $2: second integer
+# Returns:
+#   0 (true) if not equal, 1 otherwise
+is_int_not_equal() {
+  local a="${1-}"
+  local b="${2-}"
+  [ "$a" -ne "$b" ]
+}
+
+# Checks if first integer is less than second.
+# Args:
+#   $1: first integer
+#   $2: second integer
+# Returns:
+#   0 (true) if less, 1 otherwise
+is_int_less() {
+  local a="${1-}"
+  local b="${2-}"
+  [ "$a" -lt "$b" ]
+}
+
+# Checks if first integer is less than or equal to second.
+# Args:
+#   $1: first integer
+#   $2: second integer
+# Returns:
+#   0 (true) if less or equal, 1 otherwise
+is_int_less_equal() {
+  local a="${1-}"
+  local b="${2-}"
+  [ "$a" -le "$b" ]
+}
+
+# Checks if first integer is greater than second.
+# Args:
+#   $1: first integer
+#   $2: second integer
+# Returns:
+#   0 (true) if greater, 1 otherwise
+is_int_greater() {
+  local a="${1-}"
+  local b="${2-}"
+  [ "$a" -gt "$b" ]
+}
+
+# Checks if first integer is greater than or equal to second.
+# Args:
+#   $1: first integer
+#   $2: second integer
+# Returns:
+#   0 (true) if greater or equal, 1 otherwise
+is_int_greater_equal() {
+  local a="${1-}"
+  local b="${2-}"
+  [ "$a" -ge "$b" ]
+}
+
+# Checks if a file or directory exists.
+# Args:
+#   $1: path
+# Returns:
+#   0 (true) if exists, 1 otherwise
+file_exists() {
+  local path="${1-}"
+  [ -e "$path" ]
+}
+
+# Checks if path is a regular file.
+# Args:
+#   $1: path
+# Returns:
+#   0 (true) if file, 1 otherwise
+is_file() {
+  local path="${1-}"
+  [ -f "$path" ]
+}
+
+# Checks if path is a directory.
+# Args:
+#   $1: path
+# Returns:
+#   0 (true) if directory, 1 otherwise
+is_dir() {
+  local path="${1-}"
+  [ -d "$path" ]
+}
+
+# Checks if path is readable.
+# Args:
+#   $1: path
+# Returns:
+#   0 (true) if readable, 1 otherwise
+is_readable() {
+  local path="${1-}"
+  [ -r "$path" ]
+}
+
+# Checks if path is writable.
+# Args:
+#   $1: path
+# Returns:
+#   0 (true) if writable, 1 otherwise
+is_writable() {
+  local path="${1-}"
+  [ -w "$path" ]
+}
+
+# Checks if path is executable.
+# Args:
+#   $1: path
+# Returns:
+#   0 (true) if executable, 1 otherwise
+is_executable() {
+  local path="${1-}"
+  [ -x "$path" ]
+}
+
+# Checks if file exists and is not empty.
+# Args:
+#   $1: file path
+# Returns:
+#   0 (true) if file not empty, 1 otherwise
+file_not_empty() {
+  local path="${1-}"
+  [ -s "$path" ]
+}
+
 # Checks if a string is empty or whitespace only.
 # Args:
 #   $1: string
 # Returns:
 #   0 (true) if empty, 1 otherwise
-# ----------------------------------------------------------------------
 is_empty_or_whitespace() {
   local line="$1"
   if [ -z "$(echo "$line" | tr -d '[:space:]')" ]; then
@@ -115,40 +276,11 @@ is_empty_or_whitespace() {
   fi
 }
 
-# ----------------------------------------------------------------------
-# is_non_empty
-# Checks if a string is non-empty.
-# Args:
-#   $1: string
-# Returns:
-#   0 (true) if non-empty, 1 otherwise
-# ----------------------------------------------------------------------
-is_non_empty() {
-  local str="${1-}"
-  [ -n "$str" ]
-}
-
-# ----------------------------------------------------------------------
-# is_file
-# Checks if a file exists and is a regular file.
-# Args:
-#   $1: file path
-# Returns:
-#   0 (true) if file exists, 1 otherwise
-# ----------------------------------------------------------------------
-is_file() {
-  local file="$1"
-  [ -f "$file" ]
-}
-
-# ----------------------------------------------------------------------
-# is_function
 # Checks if a string is an existing function.
 # Args:
 #   $1: string
 # Returns:
 #   0 (true) if function exists, 1 otherwise
-# ----------------------------------------------------------------------
 is_function() {
   local string="$1"
   if ! type "$string" > /dev/null 2>&1; then
@@ -160,14 +292,11 @@ is_function() {
 
 }
 
-# ----------------------------------------------------------------------
-# is_comment_line
 # Checks if a line is a comment (indented or not).
 # Args:
 #   $1: line
 # Returns:
 #   0 (true) if comment, 1 otherwise
-# ----------------------------------------------------------------------
 is_comment_line() {
   local line="$1"
   case "$line" in
@@ -180,14 +309,11 @@ is_comment_line() {
   esac
 }
 
-# ----------------------------------------------------------------------
-# is_func_start_line
 # Checks if a line contains the start of a function definition (without '{').
 # Args:
 #   $1: line
 # Returns:
 #   0 (true) if function start, 1 otherwise
-# ----------------------------------------------------------------------
 is_func_start_line() {
   local line="$1"
   line=$(echo "$line" | sed 's/^[[:space:]]*//')
@@ -201,28 +327,22 @@ is_func_start_line() {
   esac
 }
 
-# ----------------------------------------------------------------------
-# is_open_brace_line
 # Checks if a line contains only '{' (with or without indentation).
 # Args:
 #   $1: line
 # Returns:
 #   0 (true) if line is '{', 1 otherwise
-# ----------------------------------------------------------------------
 is_open_brace_line() {
   local line="$1"
   line=$(echo "$line" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
   [ "$line" = "{" ]
 }
 
-# ----------------------------------------------------------------------
-# extract_func_name
 # Extracts the function name from a function definition line.
 # Args:
 #   $1: line containing function definition
 # Returns:
 #   Function name or empty string
-# ----------------------------------------------------------------------
 extract_func_name() {
   local line="$1"
   line=$(echo "$line" | sed 's/^[[:space:]]*//')
@@ -245,15 +365,12 @@ extract_func_name() {
   printf '%s\n' "$func_name"
 }
 
-# ----------------------------------------------------------------------
-# collect_comment
 # Appends a line to an existing comment block.
 # Args:
 #   $1: existing comment block
 #   $2: new comment line
 # Returns:
 #   Combined comment block
-# ----------------------------------------------------------------------
 collect_comment() {
   local existing_block="$1"
   local new_comment_line="$2"
@@ -273,15 +390,12 @@ collect_comment() {
   fi
 }
 
-# ----------------------------------------------------------------------
-# append_comment
 # Combines existing comment block with new line.
 # Args:
 #   $1: existing comment block
 #   $2: new comment line
 # Returns:
 #   Combined comment block
-# ----------------------------------------------------------------------
 append_comment() {
   local existing_block="$1"
   local new_comment_line="$2"
@@ -289,14 +403,11 @@ append_comment() {
   printf '%s\n    %s\n' "$existing_block" "$new_comment_line"
 }
 
-# ----------------------------------------------------------------------
-# process_function_start
 # Processes the start of a function (either inline or multi-line).
 # Args:
 #   $1: line containing function definition
 # Returns:
 #   Function name
-# ----------------------------------------------------------------------
 process_function_start() {
   local line="$1"
   local function_name
@@ -313,8 +424,6 @@ process_function_start() {
   printf '%s\n' "$function_name"
 }
 
-# ----------------------------------------------------------------------
-# handle_function_end
 # Handles the function block after finding the opening brace.
 # Args:
 #   $1: current comment block
@@ -322,30 +431,29 @@ process_function_start() {
 #   $3: target function name
 # Returns:
 #   None
-# ----------------------------------------------------------------------
 handle_function_end() {
   local comment_block="$1"
   local function_name="$2"
   local target_function_name="$3"
 
-  if is_non_empty "$target_function_name" && [ "$function_name" != "$target_function_name" ]; then
+  if is_not_empty "$target_function_name" && [ "$function_name" != "$target_function_name" ]; then
     comment_block=""
     return
   fi
 
   # If __FUNCTION_PREFIX is set, only process functions with this prefix
-  if is_non_empty "${__FUNCTION_PREFIX-}" &&
+  if is_not_empty "${__FUNCTION_PREFIX-}" &&
     [[ "$function_name" != "${__FUNCTION_PREFIX}"* ]]; then
     comment_block=""
     return
   fi
 
   # Remove the prefix from the function name, if __FUNCTION_PREFIX is set
-  if is_non_empty "${__FUNCTION_PREFIX-}" && [[ "$function_name" == "${__FUNCTION_PREFIX}"* ]]; then
+  if is_not_empty "${__FUNCTION_PREFIX-}" && [[ "$function_name" == "${__FUNCTION_PREFIX}"* ]]; then
     function_name="${function_name#${__FUNCTION_PREFIX}}"  # Entferne das Präfix
   fi
 
-  if is_non_empty "$comment_block"; then
+  if is_not_empty "$comment_block"; then
     printf '  %s\n' "$function_name"
     echo "    $comment_block"
     echo
@@ -354,14 +462,11 @@ handle_function_end() {
   fi
 }
 
-# ----------------------------------------------------------------------
-# extract_all_comments
 # Extracts all functions and their comment blocks from a file.
 # Supports multi-line function headers and '{' on the next line.
 # Args:
 #   $1: shell script file
 #   $2: optional function name to filter
-# ----------------------------------------------------------------------
 extract_all_comments() {
   local script_file="$1"
   local target_function_name="${2-}"
@@ -369,11 +474,11 @@ extract_all_comments() {
   local inside_comment=0
   local pending_function_line=""
 
-  while IFS= read -r line || is_non_empty "$line"; do
+  while IFS= read -r line || is_not_empty "$line"; do
     if is_comment_line "$line"; then
       comment_block=$(collect_comment "$comment_block" "$line")
       inside_comment=1
-    elif is_non_empty "$pending_function_line"; then
+    elif is_not_empty "$pending_function_line"; then
       if is_open_brace_line "$line"; then
         local function_name
         function_name=$(process_function_start "$pending_function_line")
@@ -405,7 +510,6 @@ extract_all_comments() {
   done < "$script_file"
 }
 
-# ----------------------------------------------------------------------
 # list_functions lists declared shell functions.
 #
 # If a prefix is provided, only functions whose names start with that prefix
@@ -428,11 +532,10 @@ extract_all_comments() {
 # Returns:
 #   0: Success.
 #   1: Error if no functions are declared or if an unexpected error occurs.
-# ----------------------------------------------------------------------
 list_functions() {
   prefix=${1-}
 
-  if is_non_empty "$prefix"; then
+  if is_not_empty "$prefix"; then
     # Filter functions by prefix
     declare -F | grep -o "^declare -f ${prefix}[A-Za-z0-9_]*" | awk '{print $3}'
   else
@@ -441,13 +544,10 @@ list_functions() {
   fi
 }
 
-# ----------------------------------------------------------------------
-# Main
 # Entry point of the script.
 # Args:
 #   $1: command (e.g., 'hallo')
 #   $2+: remaining arguments to be passed to the function
-# ----------------------------------------------------------------------
 main() {
   # Set shell options for safety and debugging
   set_shell_options
@@ -492,7 +592,7 @@ main() {
     esac
   done
 
-  if ( is_non_empty "${HELP-}" ); then
+  if ( is_not_empty "${HELP-}" ); then
     help "$@"
     exit 0
   fi
