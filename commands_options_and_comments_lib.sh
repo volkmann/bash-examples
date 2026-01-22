@@ -1,23 +1,31 @@
 #!/bin/sh
-# POSIX shell script library: Extract functions and comment blocks from scripts.
-# Supports all common shell function definitions, including multi-line headers
-# with '{' on the next line.
+# POSIX sh library — option parser and command/comment extractor
 #
-# Provides extended is_* functions for:
-#   - Strings
-#   - Integers
-#   - Files/Paths
+# This file is written to be:
+# - POSIX compatible (/bin/sh)
+# - Structured according to Google Shell Style Guide principles:
+#   - Lowercase function names with underscores
+#   - Short functions, clear names, and argument/return docs
+#   - Use printf instead of echo
+#   - Avoid exporting globals unless necessary
+# - Portable: uses awk/sed/grep where appropriate (POSIX utilities)
+#
+# Public API:
+# - init_global_parameters
+# - extract_all_comments <file> [target_function]
+# - list_functions_in_file <file>
+# - help <file> [command]
+#
+# Usage example (in your script):
+#   __FUNCTION_PREFIX='cmd_'
+#   . "$(cd "$(dirname -- "$0")" && pwd)/commands_options_and_comments_lib.sh"
+#   main "$@"
 
-# ===Multiple source guard ===
+# Multiple source guard.
 if [ "${_COMMANDS_OPTIONS_AND_COMMENTS_LIB_SOURCED:-}" = "1" ]; then
   return 0 2>/dev/null || exit 0
 fi
 _COMMANDS_OPTIONS_AND_COMMENTS_LIB_SOURCED=1
-
-## Copy the following three lines to your script and uncomment them!
-#__FUNCTION_PREFIX='cmd_'
-#readonly SCRIPT_PATH="$(cd -- "$(dirname -- "${0}")" && pwd -P)"
-#source "${SCRIPT_PATH}/commands_options_and_comments_lib.sh"
 
 # Prints out the inline help
 usage() {
@@ -52,6 +60,33 @@ Examples:
 EOF
 }
 
+# -----------------------------------------------------------------------------
+# Shell options (callers may set their own). Keep minimal and portable.
+# -----------------------------------------------------------------------------
+set_shell_options() {
+  # POSIX: set -eu is portable. Do not set pipefail here (not POSIX).
+  set -eu
+}
+
+# -----------------------------------------------------------------------------
+# Initialize globals.
+# -----------------------------------------------------------------------------
+# Note: do not export these variables; keep them internal to avoid environment
+# pollution. Call coac_init_global_parameters from your script if you need them.
+init_global_parameters() {
+  # Name of the invoked script (no path)
+  __SCRIPT_NAME="${0##*/}"
+
+  # Directory of the invoked script (resolved via cd/pwd)
+  __DIR="$(cd "$(dirname -- "${0}")" && pwd)"
+
+  # Path to the script file
+  __FILE="${__DIR}/${__SCRIPT_NAME}"
+
+  # Base name without .sh suffix
+  __BASE="$(basename -- "${__FILE}" .sh)"
+}
+
 # Displays help for a specific command or general usage if no command is provided.
 # Args:
 #   $1 (optional): The command for which to display help.
@@ -63,22 +98,6 @@ help() {
     cmd_func="${__FUNCTION_PREFIX-}${cmd}"
   fi
   extract_all_comments "${__FILE}" "${cmd_func}"
-}
-
-# set_shell_option
-set_shell_options() {
-  set -o errexit
-  set -o pipefail
-  set -o nounset
-#  set -o xtrace
-}
-
-# init_global_parameters
-init_global_parameters() {
-  readonly __SCRIPT_NAME="${0}"
-  readonly __DIR="$(cd -- "$(dirname -- "${0}")" && pwd -P)"
-  readonly __FILE="${__DIR}/$(basename -- "${0}")"
-  readonly __BASE="$(basename -- ${__FILE} .sh)"
 }
 
 # Checks if a string is empty.
@@ -714,10 +733,10 @@ list_functions() {
   fi
 }
 
-# Entry point of the script.
-# Args:
-#   $1: command (e.g., 'hallo')
-#   $2+: remaining arguments to be passed to the function
+# Main function:
+# - Implements a simple --key / --key=value parser and passes non-option
+#   arguments as positional parameters.
+# - Executes the first non-option argument as command
 main() {
   # Parse command-line arguments
   local cmd=""
