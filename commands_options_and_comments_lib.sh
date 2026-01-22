@@ -6,7 +6,6 @@
 # - Structured according to Google Shell Style Guide principles:
 #   - Lowercase function names with underscores
 #   - Short functions, clear names, and argument/return docs
-#   - Use printf instead of echo
 #   - Avoid exporting globals unless necessary
 # - Portable: uses awk/sed/grep where appropriate (POSIX utilities)
 #
