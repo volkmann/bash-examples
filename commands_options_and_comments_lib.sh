@@ -780,10 +780,11 @@ main() {
   # Construct the function name by prefixing '__FUNCTION_PREFIX' to the command
   cmd_func="${__FUNCTION_PREFIX-}${cmd}"
 
-  # Check if the corresponding function exists
-  if ! declare -F "${cmd_func}" >/dev/null 2>&1; then
-    echo "Error: Command '${cmd}' is not recognized." >&2
-    exit 1
+  # POSIX-safe existence check:
+  # If `command -v` cannot find the name, treat it as unknown.
+  if ! command -v "${cmd_func}" >/dev/null 2>&1; then
+    printf 'Error: Command %s is not recognized.\n' "$cmd" >&2
+    return 1
   fi
 
   # Call the function with the remaining arguments
