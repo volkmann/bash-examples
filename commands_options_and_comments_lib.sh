@@ -719,9 +719,6 @@ list_functions() {
 #   $1: command (e.g., 'hallo')
 #   $2+: remaining arguments to be passed to the function
 main() {
-  # Set shell options for safety and debugging
-  set_shell_options
-
   # Parse command-line arguments
   local cmd=""
   local cmd_func=""
@@ -758,6 +755,9 @@ main() {
         ;;
     esac
   done
+
+  # Set shell options for safety and debugging
+  set_shell_options
 
   # Initialize global parameters (if any)
   init_global_parameters
