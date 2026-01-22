@@ -810,3 +810,10 @@ main() {
   "${cmd_func}" "$@"
 }
 
+# If invoked directly, run main.
+# Fully POSIX-safe check: use parameter expansion to obtain basename.
+# -----------------------------------------------------------------------------
+if [ "${0##*/}" = "commands_options_and_comments_lib.sh" ] && [ "${0#-}" = "${0}" ]; then
+  init_global_parameters 2>/dev/null || true
+  main "$@"
+fi
