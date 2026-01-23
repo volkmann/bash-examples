@@ -457,7 +457,7 @@ file_is_executable() {
 #   0 (true) if empty, 1 otherwise
 is_empty_or_whitespace() {
   coac_line="$1"
-  if [ -z "$(echo "$coac_line" | tr -d '[:space:]')" ]; then
+  if [ -z "$(printf '%s' "$coac_line" | tr -d '[:space:]')" ]; then
     return 0
   else
     return 1
@@ -504,7 +504,7 @@ is_comment_line() {
 #   0 (true) if function start, 1 otherwise
 is_func_start_line() {
   coac_line="$1"
-  coac_line=$(echo "$coac_line" | sed 's/^[[:space:]]*//')
+  coac_line=$(printf '%s' "$coac_line" | sed 's/^[[:space:]]*//')
   case "$coac_line" in
     function*|*'()'*)
       return 0
@@ -522,7 +522,7 @@ is_func_start_line() {
 #   0 (true) if line is '{', 1 otherwise
 is_open_brace_line() {
   coac_line="$1"
-  coac_line=$(echo "$coac_line" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
+  coac_line=$(printf '%s' "$coac_line" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
   [ "$coac_line" = "{" ]
 }
 
@@ -533,22 +533,22 @@ is_open_brace_line() {
 #   Function name or empty string
 extract_func_name() {
   coac_line="$1"
-  coac_line=$(echo "$coac_line" | sed 's/^[[:space:]]*//')
+  coac_line=$(printf '%s' "$coac_line" | sed 's/^[[:space:]]*//')
   coac_func_name=""
 
   case "$coac_line" in
     function\ *\(*)
-      coac_func_name=$(echo "$coac_line" | awk '{print $2}' | sed 's/()$//')
+      coac_func_name=$(printf '%s' "$coac_line" | awk '{print $2}' | sed 's/()$//')
       ;;
     function\ *)
-      coac_func_name=$(echo "$coac_line" | awk '{print $2}')
+      coac_func_name=$(printf '%s' "$coac_line" | awk '{print $2}')
       ;;
     *'()'*)
-      coac_func_name=$(echo "$coac_line" | awk '{print $1}' | sed 's/()$//')
+      coac_func_name=$(printf '%s' "$coac_line" | awk '{print $1}' | sed 's/()$//')
       ;;
   esac
 
-  coac_func_name=$(echo "$coac_func_name" | tr -d ' ')
+  coac_func_name=$(printf '%s' "$coac_func_name" | tr -d ' ')
 
   printf '%s\n' "$coac_func_name"
 }
@@ -564,15 +564,15 @@ collect_comment() {
   coac_new_comment_line="$2"
 
   # Remove separators consisting only of '#' and repeated '#', '-' or '=' characters
-  coac_new_comment_line=$(echo "$coac_new_comment_line" | sed '/^[[:space:]]*#[[:space:]]*$/d; /^[[:space:]]*#[[:space:]]*\([#=-]\)\1\{2,\}[[:space:]]*$/d')
+  coac_new_comment_line=$(printf '%s' "$coac_new_comment_line" | sed '/^[[:space:]]*#[[:space:]]*$/d; /^[[:space:]]*#[[:space:]]*\([#=-]\)\1\{2,\}[[:space:]]*$/d')
 
   # Remove the '#' and any leading whitespace from the comment line
-  coac_new_comment_line=$(echo "$coac_new_comment_line" | sed 's/^[[:space:]]*#[[:space:]]//')
+  coac_new_comment_line=$(printf '%s' "$coac_new_comment_line" | sed 's/^[[:space:]]*#[[:space:]]//')
 
   if is_empty "$coac_existing_block"; then
-    echo "$coac_new_comment_line"
+    printf '%s\n' "$coac_new_comment_line"
   elif is_empty_or_whitespace "$coac_new_comment_line"; then
-    echo "$coac_existing_block"
+    printf '%s\n' "$coac_existing_block"
   else
     append_comment "$coac_existing_block" "$coac_new_comment_line"
   fi
@@ -654,8 +654,7 @@ handle_function_end() {
 
   if is_not_empty "$coac_comment_block"; then
     printf '  %s\n' "$coac_function_name"
-    echo "    $coac_comment_block"
-    echo
+    printf '    %s\n\n' "$coac_comment_block"
   else
     printf '  %s\n' "$coac_function_name"
   fi
@@ -762,16 +761,16 @@ main() {
 
         case ${coac_arg} in
           --"${coac_key}"=*)
-            # Assign value to the variable
-            eval "${coac_var}"="${coac_arg#*=}"
-            ;;
+            # Assign value to the variable (quoted to avoid eval word-splitting)
+            eval "${coac_var}=\"${coac_arg#*=}\""
+            ;; 
           --"${coac_key}")
             # If no value is provided, set the variable to 1
-            eval "${coac_var}"=1
-            ;;
+            eval "${coac_var}=1"
+            ;; 
           *)
             # Invalid argument format
-            echo "Invalid argument format: ${coac_arg}" >&2
+            printf '%s\n' "Invalid argument format: ${coac_arg}" >&2
             exit 1
             ;;
         esac
