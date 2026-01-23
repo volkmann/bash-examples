@@ -321,7 +321,9 @@ is_positive_integer() {
 # Returns:
 #   0 (true) if $1 >= $2 and $1 <= $3, 1 otherwise
 is_between() {
-  coac_val="${1-}" coac_low="${2-}" coac_high="${3-}"
+  coac_val="${1-}"
+  coac_low="${2-}"
+  coac_high="${3-}"
   [ "$coac_val" -ge "$coac_low" ] 2>/dev/null && [ "$coac_val" -le "$coac_high" ] 2>/dev/null
 }
 
@@ -352,7 +354,8 @@ is_even() {
 # Returns:
 #   0 (true) if $1 starts with $2, 1 otherwise
 starts_with() {
-  coac_str="${1-}" coac_prefix="${2-}"
+  coac_str="${1-}"
+  coac_prefix="${2-}"
   [ "${coac_str#"$coac_prefix"}" != "$coac_str" ]
 }
 
@@ -363,7 +366,8 @@ starts_with() {
 # Returns:
 #   0 (true) if $1 ends with $2, 1 otherwise
 ends_with() {
-  coac_str="${1-}" coac_suffix="${2-}"
+  coac_str="${1-}"
+  coac_suffix="${2-}"
   case "$coac_str" in
     *"$coac_suffix") return 0 ;;
     *) return 1 ;;
@@ -377,7 +381,8 @@ ends_with() {
 # Returns:
 #   0 (true) if substring is found, 1 otherwise
 contains_substring() {
-  coac_str="${1-}" coac_sub="${2-}"
+  coac_str="${1-}"
+  coac_sub="${2-}"
   case "$coac_str" in
     *"$coac_sub"*) return 0 ;;
     *) return 1 ;;
@@ -763,11 +768,11 @@ main() {
           --"${coac_key}"=*)
             # Assign value to the variable (quoted to avoid eval word-splitting)
             eval "${coac_var}=\"${coac_arg#*=}\""
-            ;; 
+            ;;
           --"${coac_key}")
             # If no value is provided, set the variable to 1
             eval "${coac_var}=1"
-            ;; 
+            ;;
           *)
             # Invalid argument format
             printf '%s\n' "Invalid argument format: ${coac_arg}" >&2
