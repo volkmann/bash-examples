@@ -90,13 +90,13 @@ init_global_parameters() {
 # Args:
 #   $1 (optional): The command for which to display help.
 help() {
-  local cmd="${1-}"  # Get the command argument or default to empty.
-  local cmd_func=
+  coac_cmd="${1-}"  # Get the command argument or default to empty.
+  coac_cmd_func=""
 
-  if is_not_empty "${cmd}"; then
-    cmd_func="${__FUNCTION_PREFIX-}${cmd}"
+  if is_not_empty "${coac_cmd}"; then
+    coac_cmd_func="${__FUNCTION_PREFIX-}${coac_cmd}"
   fi
-  extract_all_comments "${__FILE}" "${cmd_func}"
+  extract_all_comments "${__FILE}" "${coac_cmd_func}"
 }
 
 # Checks if a string is empty.
@@ -105,8 +105,8 @@ help() {
 # Returns:
 #   0 (true) if empty, 1 otherwise
 is_empty() {
-  local str="${1-}"
-  [ -z "$str" ]
+  coac_str="${1-}"
+  [ -z "$coac_str" ]
 }
 
 # Checks if a string is non-empty.
@@ -115,8 +115,8 @@ is_empty() {
 # Returns:
 #   0 (true) if non-empty, 1 otherwise
 is_not_empty() {
-  local str="${1-}"
-  [ -n "$str" ]
+  coac_str="${1-}"
+  [ -n "$coac_str" ]
 }
 
 # Checks if two strings are equal.
@@ -126,9 +126,9 @@ is_not_empty() {
 # Returns:
 #   0 (true) if equal, 1 otherwise
 is_equal() {
-  local a="${1-}"
-  local b="${2-}"
-  [ "$a" = "$b" ]
+  coac_a="${1-}"
+  coac_b="${2-}"
+  [ "$coac_a" = "$coac_b" ]
 }
 
 # Checks if two strings are not equal.
@@ -138,9 +138,9 @@ is_equal() {
 # Returns:
 #   0 (true) if not equal, 1 otherwise
 is_not_equal() {
-  local a="${1-}"
-  local b="${2-}"
-  [ "$a" != "$b" ]
+  coac_a="${1-}"
+  coac_b="${2-}"
+  [ "$coac_a" != "$coac_b" ]
 }
 
 # Checks if two integers are equal.
@@ -150,9 +150,9 @@ is_not_equal() {
 # Returns:
 #   0 (true) if equal, 1 otherwise
 is_int_equal() {
-  local a="${1-}"
-  local b="${2-}"
-  [ "$a" -eq "$b" ]
+  coac_a="${1-}"
+  coac_b="${2-}"
+  [ "$coac_a" -eq "$coac_b" ]
 }
 
 # Checks if two integers are not equal.
@@ -162,9 +162,9 @@ is_int_equal() {
 # Returns:
 #   0 (true) if not equal, 1 otherwise
 is_int_not_equal() {
-  local a="${1-}"
-  local b="${2-}"
-  [ "$a" -ne "$b" ]
+  coac_a="${1-}"
+  coac_b="${2-}"
+  [ "$coac_a" -ne "$coac_b" ]
 }
 
 # Checks if first integer is less than second.
@@ -174,9 +174,9 @@ is_int_not_equal() {
 # Returns:
 #   0 (true) if less, 1 otherwise
 is_int_less() {
-  local a="${1-}"
-  local b="${2-}"
-  [ "$a" -lt "$b" ]
+  coac_a="${1-}"
+  coac_b="${2-}"
+  [ "$coac_a" -lt "$coac_b" ]
 }
 
 # Checks if first integer is less than or equal to second.
@@ -186,9 +186,9 @@ is_int_less() {
 # Returns:
 #   0 (true) if less or equal, 1 otherwise
 is_int_less_equal() {
-  local a="${1-}"
-  local b="${2-}"
-  [ "$a" -le "$b" ]
+  coac_a="${1-}"
+  coac_b="${2-}"
+  [ "$coac_a" -le "$coac_b" ]
 }
 
 # Checks if first integer is greater than second.
@@ -198,9 +198,9 @@ is_int_less_equal() {
 # Returns:
 #   0 (true) if greater, 1 otherwise
 is_int_greater() {
-  local a="${1-}"
-  local b="${2-}"
-  [ "$a" -gt "$b" ]
+  coac_a="${1-}"
+  coac_b="${2-}"
+  [ "$coac_a" -gt "$coac_b" ]
 }
 
 # Checks if first integer is greater than or equal to second.
@@ -210,9 +210,9 @@ is_int_greater() {
 # Returns:
 #   0 (true) if greater or equal, 1 otherwise
 is_int_greater_equal() {
-  local a="${1-}"
-  local b="${2-}"
-  [ "$a" -ge "$b" ]
+  coac_a="${1-}"
+  coac_b="${2-}"
+  [ "$coac_a" -ge "$coac_b" ]
 }
 
 # Checks if a file or directory exists.
@@ -221,8 +221,8 @@ is_int_greater_equal() {
 # Returns:
 #   0 (true) if exists, 1 otherwise
 file_exists() {
-  local path="${1-}"
-  [ -e "$path" ]
+  coac_path="${1-}"
+  [ -e "$coac_path" ]
 }
 
 # Checks if path is a regular file.
@@ -231,8 +231,8 @@ file_exists() {
 # Returns:
 #   0 (true) if file, 1 otherwise
 is_file() {
-  local path="${1-}"
-  [ -f "$path" ]
+  coac_path="${1-}"
+  [ -f "$coac_path" ]
 }
 
 # Checks if path is a directory.
@@ -241,8 +241,8 @@ is_file() {
 # Returns:
 #   0 (true) if directory, 1 otherwise
 is_dir() {
-  local path="${1-}"
-  [ -d "$path" ]
+  coac_path="${1-}"
+  [ -d "$coac_path" ]
 }
 
 # Checks if path is readable.
@@ -251,8 +251,8 @@ is_dir() {
 # Returns:
 #   0 (true) if readable, 1 otherwise
 is_readable() {
-  local path="${1-}"
-  [ -r "$path" ]
+  coac_path="${1-}"
+  [ -r "$coac_path" ]
 }
 
 # Checks if path is writable.
@@ -261,8 +261,8 @@ is_readable() {
 # Returns:
 #   0 (true) if writable, 1 otherwise
 is_writable() {
-  local path="${1-}"
-  [ -w "$path" ]
+  coac_path="${1-}"
+  [ -w "$coac_path" ]
 }
 
 # Checks if path is executable.
@@ -271,8 +271,8 @@ is_writable() {
 # Returns:
 #   0 (true) if executable, 1 otherwise
 is_executable() {
-  local path="${1-}"
-  [ -x "$path" ]
+  coac_path="${1-}"
+  [ -x "$coac_path" ]
 }
 
 # Checks if file exists and is not empty.
@@ -281,8 +281,8 @@ is_executable() {
 # Returns:
 #   0 (true) if file not empty, 1 otherwise
 file_not_empty() {
-  local path="${1-}"
-  [ -s "$path" ]
+  coac_path="${1-}"
+  [ -s "$coac_path" ]
 }
 
 # Checks if a string represents a valid integer (positive or negative).
@@ -291,8 +291,8 @@ file_not_empty() {
 # Returns:
 #   0 (true) if integer, 1 otherwise
 is_integer() {
-  local str="${1-}"
-  case "$str" in
+  coac_str="${1-}"
+  case "$coac_str" in
     ''|*[!0-9-]*) return 1 ;;
     -|--*) return 1 ;;
     *) return 0 ;;
@@ -305,8 +305,8 @@ is_integer() {
 # Returns:
 #   0 (true) if positive integer, 1 otherwise
 is_positive_integer() {
-  local str="${1-}"
-  case "$str" in
+  coac_str="${1-}"
+  case "$coac_str" in
     ''|*[!0-9]*) return 1 ;;
     0) return 1 ;;
     *) return 0 ;;
@@ -321,8 +321,8 @@ is_positive_integer() {
 # Returns:
 #   0 (true) if $1 >= $2 and $1 <= $3, 1 otherwise
 is_between() {
-  local val="${1-}" low="${2-}" high="${3-}"
-  [ "$val" -ge "$low" ] 2>/dev/null && [ "$val" -le "$high" ] 2>/dev/null
+  coac_val="${1-}" coac_low="${2-}" coac_high="${3-}"
+  [ "$coac_val" -ge "$coac_low" ] 2>/dev/null && [ "$coac_val" -le "$coac_high" ] 2>/dev/null
 }
 
 # Checks if integer is odd.
@@ -331,8 +331,8 @@ is_between() {
 # Returns:
 #   0 (true) if odd, 1 otherwise
 is_odd() {
-  local val="${1-}"
-  [ $((val % 2)) -eq 1 ] 2>/dev/null
+  coac_val="${1-}"
+  [ $((coac_val % 2)) -eq 1 ] 2>/dev/null
 }
 
 # Checks if integer is even.
@@ -341,8 +341,8 @@ is_odd() {
 # Returns:
 #   0 (true) if even, 1 otherwise
 is_even() {
-  local val="${1-}"
-  [ $((val % 2)) -eq 0 ] 2>/dev/null
+  coac_val="${1-}"
+  [ $((coac_val % 2)) -eq 0 ] 2>/dev/null
 }
 
 # Checks if string $1 starts with prefix $2.
@@ -352,8 +352,8 @@ is_even() {
 # Returns:
 #   0 (true) if $1 starts with $2, 1 otherwise
 starts_with() {
-  local str="${1-}" prefix="${2-}"
-  [ "${str#"$prefix"}" != "$str" ]
+  coac_str="${1-}" coac_prefix="${2-}"
+  [ "${coac_str#"$coac_prefix"}" != "$coac_str" ]
 }
 
 # Checks if string $1 ends with suffix $2.
@@ -363,9 +363,9 @@ starts_with() {
 # Returns:
 #   0 (true) if $1 ends with $2, 1 otherwise
 ends_with() {
-  local str="${1-}" suffix="${2-}"
-  case "$str" in
-    *"$suffix") return 0 ;;
+  coac_str="${1-}" coac_suffix="${2-}"
+  case "$coac_str" in
+    *"$coac_suffix") return 0 ;;
     *) return 1 ;;
   esac
 }
@@ -377,9 +377,9 @@ ends_with() {
 # Returns:
 #   0 (true) if substring is found, 1 otherwise
 contains_substring() {
-  local str="${1-}" sub="${2-}"
-  case "$str" in
-    *"$sub"*) return 0 ;;
+  coac_str="${1-}" coac_sub="${2-}"
+  case "$coac_str" in
+    *"$coac_sub"*) return 0 ;;
     *) return 1 ;;
   esac
 }
@@ -390,8 +390,8 @@ contains_substring() {
 # Returns:
 #   0 (true) if absolute, 1 otherwise
 is_absolute_path() {
-  local path="${1-}"
-  case "$path" in
+  coac_path="${1-}"
+  case "$coac_path" in
     /*) return 0 ;;
     *) return 1 ;;
   esac
@@ -403,8 +403,8 @@ is_absolute_path() {
 # Returns:
 #   0 (true) if relative, 1 otherwise
 is_relative_path() {
-  local path="${1-}"
-  case "$path" in
+  coac_path="${1-}"
+  case "$coac_path" in
     /*) return 1 ;;
     *) return 0 ;;
   esac
@@ -416,8 +416,8 @@ is_relative_path() {
 # Returns:
 #   0 (true) if symlink, 1 otherwise
 is_symlink() {
-  local path="${1-}"
-  [ -L "$path" ]
+  coac_path="${1-}"
+  [ -L "$coac_path" ]
 }
 
 # Checks if path is a readable regular file.
@@ -426,8 +426,8 @@ is_symlink() {
 # Returns:
 #   0 (true) if file exists and readable, 1 otherwise
 is_readable_file() {
-  local path="${1-}"
-  [ -f "$path" ] && [ -r "$path" ]
+  coac_path="${1-}"
+  [ -f "$coac_path" ] && [ -r "$coac_path" ]
 }
 
 # Checks if path is a writable directory.
@@ -436,8 +436,8 @@ is_readable_file() {
 # Returns:
 #   0 (true) if directory exists and writable, 1 otherwise
 is_writable_dir() {
-  local path="${1-}"
-  [ -d "$path" ] && [ -w "$path" ]
+  coac_path="${1-}"
+  [ -d "$coac_path" ] && [ -w "$coac_path" ]
 }
 
 # Checks if path is a file and executable.
@@ -446,8 +446,8 @@ is_writable_dir() {
 # Returns:
 #   0 (true) if executable file, 1 otherwise
 file_is_executable() {
-  local path="${1-}"
-  [ -f "$path" ] && [ -x "$path" ]
+  coac_path="${1-}"
+  [ -f "$coac_path" ] && [ -x "$coac_path" ]
 }
 
 # Checks if a string is empty or whitespace only.
@@ -456,8 +456,8 @@ file_is_executable() {
 # Returns:
 #   0 (true) if empty, 1 otherwise
 is_empty_or_whitespace() {
-  local line="$1"
-  if [ -z "$(echo "$line" | tr -d '[:space:]')" ]; then
+  coac_line="$1"
+  if [ -z "$(echo "$coac_line" | tr -d '[:space:]')" ]; then
     return 0
   else
     return 1
@@ -470,9 +470,9 @@ is_empty_or_whitespace() {
 # Returns:
 #   0 (true) if function exists, 1 otherwise
 is_function() {
-  local string="$1"
-  if ! type "$string" > /dev/null 2>&1; then
-    echo "Error: Command '$cmd' is not recognized." >&2
+  coac_string="$1"
+  if ! type "$coac_string" > /dev/null 2>&1; then
+    echo "Error: Command '$coac_string' is not recognized." >&2
     return 1
   else
     return 0
@@ -486,8 +486,8 @@ is_function() {
 # Returns:
 #   0 (true) if comment, 1 otherwise
 is_comment_line() {
-  local line="$1"
-  case "$line" in
+  coac_line="$1"
+  case "$coac_line" in
     \#*|[[:space:]]*\#*)
       return 0
       ;;
@@ -503,9 +503,9 @@ is_comment_line() {
 # Returns:
 #   0 (true) if function start, 1 otherwise
 is_func_start_line() {
-  local line="$1"
-  line=$(echo "$line" | sed 's/^[[:space:]]*//')
-  case "$line" in
+  coac_line="$1"
+  coac_line=$(echo "$coac_line" | sed 's/^[[:space:]]*//')
+  case "$coac_line" in
     function*|*'()'*)
       return 0
       ;;
@@ -521,9 +521,9 @@ is_func_start_line() {
 # Returns:
 #   0 (true) if line is '{', 1 otherwise
 is_open_brace_line() {
-  local line="$1"
-  line=$(echo "$line" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
-  [ "$line" = "{" ]
+  coac_line="$1"
+  coac_line=$(echo "$coac_line" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
+  [ "$coac_line" = "{" ]
 }
 
 # Extracts the function name from a function definition line.
@@ -532,25 +532,25 @@ is_open_brace_line() {
 # Returns:
 #   Function name or empty string
 extract_func_name() {
-  local line="$1"
-  line=$(echo "$line" | sed 's/^[[:space:]]*//')
-  local func_name=""
+  coac_line="$1"
+  coac_line=$(echo "$coac_line" | sed 's/^[[:space:]]*//')
+  coac_func_name=""
 
-  case "$line" in
+  case "$coac_line" in
     function\ *\(*)
-      func_name=$(echo "$line" | awk '{print $2}' | sed 's/()$//')
+      coac_func_name=$(echo "$coac_line" | awk '{print $2}' | sed 's/()$//')
       ;;
     function\ *)
-      func_name=$(echo "$line" | awk '{print $2}')
+      coac_func_name=$(echo "$coac_line" | awk '{print $2}')
       ;;
     *'()'*)
-      func_name=$(echo "$line" | awk '{print $1}' | sed 's/()$//')
+      coac_func_name=$(echo "$coac_line" | awk '{print $1}' | sed 's/()$//')
       ;;
   esac
 
-  func_name=$(echo "$func_name" | tr -d ' ')
+  coac_func_name=$(echo "$coac_func_name" | tr -d ' ')
 
-  printf '%s\n' "$func_name"
+  printf '%s\n' "$coac_func_name"
 }
 
 # Appends a line to an existing comment block.
@@ -560,21 +560,21 @@ extract_func_name() {
 # Returns:
 #   Combined comment block
 collect_comment() {
-  local existing_block="$1"
-  local new_comment_line="$2"
+  coac_existing_block="$1"
+  coac_new_comment_line="$2"
 
   # Remove separators consisting only of '#' and repeated '#', '-' or '=' characters
-  new_comment_line=$(echo "$new_comment_line" | sed '/^[[:space:]]*#[[:space:]]*$/d; /^[[:space:]]*#[[:space:]]*\([#=-]\)\1\{2,\}[[:space:]]*$/d')
+  coac_new_comment_line=$(echo "$coac_new_comment_line" | sed '/^[[:space:]]*#[[:space:]]*$/d; /^[[:space:]]*#[[:space:]]*\([#=-]\)\1\{2,\}[[:space:]]*$/d')
 
   # Remove the '#' and any leading whitespace from the comment line
-  new_comment_line=$(echo "$new_comment_line" | sed 's/^[[:space:]]*#[[:space:]]//')
+  coac_new_comment_line=$(echo "$coac_new_comment_line" | sed 's/^[[:space:]]*#[[:space:]]//')
 
-  if is_empty "$existing_block"; then
-    echo "$new_comment_line"
-  elif is_empty_or_whitespace "$new_comment_line"; then
-    echo "$existing_block"
+  if is_empty "$coac_existing_block"; then
+    echo "$coac_new_comment_line"
+  elif is_empty_or_whitespace "$coac_new_comment_line"; then
+    echo "$coac_existing_block"
   else
-    append_comment "$existing_block" "$new_comment_line"
+    append_comment "$coac_existing_block" "$coac_new_comment_line"
   fi
 }
 
@@ -585,10 +585,10 @@ collect_comment() {
 # Returns:
 #   Combined comment block
 append_comment() {
-  local existing_block="$1"
-  local new_comment_line="$2"
+  coac_existing_block="$1"
+  coac_new_comment_line="$2"
 
-  printf '%s\n    %s\n' "$existing_block" "$new_comment_line"
+  printf '%s\n    %s\n' "$coac_existing_block" "$coac_new_comment_line"
 }
 
 # Processes the start of a function (either inline or multi-line).
@@ -597,19 +597,19 @@ append_comment() {
 # Returns:
 #   Function name
 process_function_start() {
-  local line="$1"
-  local function_name
+  coac_line="$1"
+  coac_function_name=""
 
-  case "$line" in
+  case "$coac_line" in
     *'{')
-      function_name=$(extract_func_name "$line")
+      coac_function_name=$(extract_func_name "$coac_line")
       ;;
     *)
-      function_name=$(extract_func_name "$line")
+      coac_function_name=$(extract_func_name "$coac_line")
       ;;
   esac
 
-  printf '%s\n' "$function_name"
+  printf '%s\n' "$coac_function_name"
 }
 
 # Handles the function block after finding the opening brace.
@@ -620,33 +620,33 @@ process_function_start() {
 # Returns:
 #   None
 handle_function_end() {
-  local comment_block="$1"
-  local function_name="$2"
-  local target_function_name="$3"
+  coac_comment_block="$1"
+  coac_function_name="$2"
+  coac_target_function_name="$3"
 
-  if is_not_empty "$target_function_name" && [ "$function_name" != "$target_function_name" ]; then
-    comment_block=""
+  if is_not_empty "$coac_target_function_name" && [ "$coac_function_name" != "$coac_target_function_name" ]; then
+    coac_comment_block=""
     return
   fi
 
   # If __FUNCTION_PREFIX is set, only process functions with this prefix
   if is_not_empty "${__FUNCTION_PREFIX-}" &&
-    [[ "$function_name" != "${__FUNCTION_PREFIX}"* ]]; then
-    comment_block=""
+    [[ "$coac_function_name" != "${__FUNCTION_PREFIX}"* ]]; then
+    coac_comment_block=""
     return
   fi
 
   # Remove the prefix from the function name, if __FUNCTION_PREFIX is set
-  if is_not_empty "${__FUNCTION_PREFIX-}" && [[ "$function_name" == "${__FUNCTION_PREFIX}"* ]]; then
-    function_name="${function_name#${__FUNCTION_PREFIX}}"  # Entferne das Präfix
+  if is_not_empty "${__FUNCTION_PREFIX-}" && [[ "$coac_function_name" == "${__FUNCTION_PREFIX}"* ]]; then
+    coac_function_name="${coac_function_name#${__FUNCTION_PREFIX}}"  # Entferne das Präfix
   fi
 
-  if is_not_empty "$comment_block"; then
-    printf '  %s\n' "$function_name"
-    echo "    $comment_block"
+  if is_not_empty "$coac_comment_block"; then
+    printf '  %s\n' "$coac_function_name"
+    echo "    $coac_comment_block"
     echo
   else
-    printf '  %s\n' "$function_name"
+    printf '  %s\n' "$coac_function_name"
   fi
 }
 
@@ -656,46 +656,44 @@ handle_function_end() {
 #   $1: shell script file
 #   $2: optional function name to filter
 extract_all_comments() {
-  local script_file="$1"
-  local target_function_name="${2-}"
-  local comment_block=""
-  local inside_comment=0
-  local pending_function_line=""
+  coac_script_file="$1"
+  coac_target_function_name="${2-}"
+  coac_comment_block=""
+  coac_inside_comment=0
+  coac_pending_function_line=""
 
-  while IFS= read -r line || is_not_empty "$line"; do
-    if is_comment_line "$line"; then
-      comment_block=$(collect_comment "$comment_block" "$line")
-      inside_comment=1
-    elif is_not_empty "$pending_function_line"; then
-      if is_open_brace_line "$line"; then
-        local function_name
-        function_name=$(process_function_start "$pending_function_line")
-        handle_function_end "$comment_block" "$function_name" "$target_function_name"
-        comment_block=""
-        inside_comment=0
-        pending_function_line=""
+  while IFS= read -r coac_line || is_not_empty "$coac_line"; do
+    if is_comment_line "$coac_line"; then
+      coac_comment_block=$(collect_comment "$coac_comment_block" "$coac_line")
+      coac_inside_comment=1
+    elif is_not_empty "$coac_pending_function_line"; then
+      if is_open_brace_line "$coac_line"; then
+        coac_function_name=$(process_function_start "$coac_pending_function_line")
+        handle_function_end "$coac_comment_block" "$coac_function_name" "$coac_target_function_name"
+        coac_comment_block=""
+        coac_inside_comment=0
+        coac_pending_function_line=""
       else
-        pending_function_line=""
+        coac_pending_function_line=""
       fi
-    elif is_func_start_line "$line"; then
-      case "$line" in
+    elif is_func_start_line "$coac_line"; then
+      case "$coac_line" in
         *'{')
-          local function_name
-          function_name=$(process_function_start "$line")
-          handle_function_end "$comment_block" "$function_name" "$target_function_name"
-          comment_block=""
-          inside_comment=0
+          coac_function_name=$(process_function_start "$coac_line")
+          handle_function_end "$coac_comment_block" "$coac_function_name" "$coac_target_function_name"
+          coac_comment_block=""
+          coac_inside_comment=0
           ;;
         *)
-          pending_function_line="$line"
+          coac_pending_function_line="$coac_line"
           ;;
       esac
     else
-      comment_block=""
-      inside_comment=0
-      pending_function_line=""
+      coac_comment_block=""
+      coac_inside_comment=0
+      coac_pending_function_line=""
     fi
-  done < "$script_file"
+  done < "$coac_script_file"
 }
 
 # list_functions lists declared shell functions.
@@ -721,11 +719,11 @@ extract_all_comments() {
 #   0: Success.
 #   1: Error if no functions are declared or if an unexpected error occurs.
 list_functions() {
-  prefix=${1-}
+  coac_prefix=${1-}
 
-  if is_not_empty "$prefix"; then
+  if is_not_empty "$coac_prefix"; then
     # Filter functions by prefix
-    declare -F | grep -o "^declare -f ${prefix}[A-Za-z0-9_]*" | awk '{print $3}'
+    declare -F | grep -o "^declare -f ${coac_prefix}[A-Za-z0-9_]*" | awk '{print $3}'
   else
     # List all functions
     declare -F | awk '{print $3}'
@@ -738,38 +736,38 @@ list_functions() {
 # - Executes the first non-option argument as command
 main() {
   # Parse command-line arguments
-  local cmd=""
-  local cmd_func=""
-  local key=""
-  local var=""
+  coac_cmd=""
+  coac_cmd_func=""
+  coac_key=""
+  coac_var=""
 
-  for arg in "$@"; do
+  for coac_arg in "$@"; do
     shift
-    case ${arg} in
+    case ${coac_arg} in
       --[a-zA-Z0-9][-_a-zA-Z0-9]*)
         # Parse options of the form --key=value or --key
-        key=$(printf "%s" "${arg}" | sed 's/^--//; s/[^-_a-zA-Z0-9].*$//')
-        var=$(printf "%s" "${key}" | sed 's/-/_/g' | tr '[:lower:]' '[:upper:]')
+        coac_key=$(printf "%s" "${coac_arg}" | sed 's/^--//; s/[^-_a-zA-Z0-9].*$//')
+        coac_var=$(printf "%s" "${coac_key}" | sed 's/-/_/g' | tr '[:lower:]' '[:upper:]')
 
-        case ${arg} in
-          --"${key}"=*)
+        case ${coac_arg} in
+          --"${coac_key}"=*)
             # Assign value to the variable
-            eval "${var}"="${arg#*=}"
+            eval "${coac_var}"="${coac_arg#*=}"
             ;;
-          --"${key}")
+          --"${coac_key}")
             # If no value is provided, set the variable to 1
-            eval "${var}"=1
+            eval "${coac_var}"=1
             ;;
           *)
             # Invalid argument format
-            echo "Invalid argument format: ${arg}" >&2
+            echo "Invalid argument format: ${coac_arg}" >&2
             exit 1
             ;;
         esac
         ;;
       *)
         # Collect all non-option arguments
-        set -- "$@" "${arg}"
+        set -- "$@" "${coac_arg}"
         ;;
     esac
   done
@@ -792,21 +790,21 @@ main() {
   fi
 
   # The first argument is the command
-  cmd="$1"
+  coac_cmd="$1"
   shift  # Remove the first argument (command) from the list
 
   # Construct the function name by prefixing '__FUNCTION_PREFIX' to the command
-  cmd_func="${__FUNCTION_PREFIX-}${cmd}"
+  coac_cmd_func="${__FUNCTION_PREFIX-}${coac_cmd}"
 
   # POSIX-safe existence check:
   # If `command -v` cannot find the name, treat it as unknown.
-  if ! command -v "${cmd_func}" >/dev/null 2>&1; then
-    printf 'Error: Command %s is not recognized.\n' "$cmd" >&2
+  if ! command -v "${coac_cmd_func}" >/dev/null 2>&1; then
+    printf 'Error: Command %s is not recognized.\n' "$coac_cmd" >&2
     return 1
   fi
 
   # Call the function with the remaining arguments
-  "${cmd_func}" "$@"
+  "${coac_cmd_func}" "$@"
 }
 
 # If invoked directly, run main.
