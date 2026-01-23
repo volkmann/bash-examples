@@ -471,8 +471,8 @@ is_empty_or_whitespace() {
 #   0 (true) if function exists, 1 otherwise
 is_function() {
   coac_string="$1"
-  if ! type "$coac_string" > /dev/null 2>&1; then
-    echo "Error: Command '$coac_string' is not recognized." >&2
+  if ! command -v "$coac_string" >/dev/null 2>&1; then
+    printf 'Error: Command %s is not recognized.\n' "$coac_string" >&2
     return 1
   else
     return 0
@@ -630,15 +630,26 @@ handle_function_end() {
   fi
 
   # If __FUNCTION_PREFIX is set, only process functions with this prefix
-  if is_not_empty "${__FUNCTION_PREFIX-}" &&
-    [[ "$coac_function_name" != "${__FUNCTION_PREFIX}"* ]]; then
-    coac_comment_block=""
-    return
+  if is_not_empty "${__FUNCTION_PREFIX-}"; then
+    case "$coac_function_name" in
+      "${__FUNCTION_PREFIX}"*)
+        ;; # matches prefix, continue
+      *)
+        coac_comment_block=""
+        return
+        ;;
+    esac
   fi
 
   # Remove the prefix from the function name, if __FUNCTION_PREFIX is set
-  if is_not_empty "${__FUNCTION_PREFIX-}" && [[ "$coac_function_name" == "${__FUNCTION_PREFIX}"* ]]; then
-    coac_function_name="${coac_function_name#${__FUNCTION_PREFIX}}"  # Entferne das Präfix
+  if is_not_empty "${__FUNCTION_PREFIX-}"; then
+    case "$coac_function_name" in
+      "${__FUNCTION_PREFIX}"*)
+        coac_function_name=${coac_function_name#${__FUNCTION_PREFIX}}  # Entferne das Präfix
+        ;;
+      *)
+        ;;
+    esac
   fi
 
   if is_not_empty "$coac_comment_block"; then
