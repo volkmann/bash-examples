@@ -1,6 +1,11 @@
 #!/bin/sh
 # POSIX sh library — option parser and command/comment extractor
 #
+# WARNING:
+# The argument parsing in `main()` relies on `eval` for dynamic
+# variable assignment. This approach is flexible but unsafe with
+# untrusted input and is discouraged in hardened scripts.
+#
 # This file is written to be:
 # - POSIX compatible (/bin/sh)
 # - Structured according to Google Shell Style Guide principles:
@@ -26,7 +31,7 @@ if [ "${_COMMANDS_OPTIONS_AND_COMMENTS_LIB_SOURCED:-}" = "1" ]; then
 fi
 _COMMANDS_OPTIONS_AND_COMMENTS_LIB_SOURCED=1
 
-# Prints out the inline help
+# Prints out the inline help (callers may override and write their own)
 usage() {
   cat <<EOF
 USAGE:
