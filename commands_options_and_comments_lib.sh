@@ -60,8 +60,15 @@ EOF
 }
 
 # -----------------------------------------------------------------------------
-# Shell options (callers may set their own). Keep minimal and portable.
+# Shell options (callers may override and set their own).
 # -----------------------------------------------------------------------------
+# Example for bash:
+#  set_shell_options() {
+#    set -o errexit
+#    set -o pipefail
+#    set -o nounset
+#  #  set -o xtrace # trace for debugging.
+#  }
 set_shell_options() {
   # POSIX: set -eu is portable. Do not set pipefail here (not POSIX).
   set -eu
@@ -71,7 +78,7 @@ set_shell_options() {
 # Initialize globals.
 # -----------------------------------------------------------------------------
 # Note: do not export these variables; keep them internal to avoid environment
-# pollution. Call coac_init_global_parameters from your script if you need them.
+# pollution. Call init_global_parameters from your script if you need them.
 init_global_parameters() {
   # Name of the invoked script (no path)
   __SCRIPT_NAME="${0##*/}"
