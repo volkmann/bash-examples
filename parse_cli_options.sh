@@ -13,7 +13,7 @@ while [ $# -gt 0 ]; do
 
   # Check if argument starts with "--"
   case "$arg" in
-    --[[:alnum:]][-_[:alnum:]]*)
+    --[a-zA-Z0-9][-_a-zA-Z0-9]*)
       # Extract key (remove -- and invalid characters)
       key=$(printf "%s" "$arg" | sed 's/^--//; s/[^-_[:alnum:]].*$//')
       var=$(printf "%s" "$key" | sed 's/-/_/g' | tr '[:lower:]' '[:upper:]')
